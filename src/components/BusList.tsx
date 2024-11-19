@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+
 import { Bus, PaginatedResponse } from '../types/Bus';
 
 const BusList: React.FC = () => {
@@ -7,6 +9,9 @@ const BusList: React.FC = () => {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [currentPage, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const navigate = useNavigate(); // Usamos el hook useNavigate
+
 
     const fetchBuses = async (pageNumber: number) => {
         setLoading(true);
@@ -32,6 +37,10 @@ const BusList: React.FC = () => {
     useEffect(() => {
         fetchBuses(page);
     }, [page]);
+    // Función para redirigir al detalle del bus
+    const handleViewDetails = (id: number) => {
+        navigate(`/bus/${id}`);  // Redirige a la página de detalle del bus con el ID
+    };
 
     return (
         <div>
@@ -60,27 +69,22 @@ const BusList: React.FC = () => {
                         <td>{bus.marca}</td>
                         <td>{bus.estado}</td>
                         <td>
-                            <button className="btn btn-primary">VER</button>
+                            <button className="btn btn-primary"
+                                    onClick={() => handleViewDetails(bus.id)}
+                            >VER
+                            </button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
-            <div>
-                <button
-                    onClick={() => setPage(page - 1)}
-                    disabled={page === 0}
-                >
-                    Anterior
-                </button>
-                <span> Página {page + 1} de {totalPages} </span>
-                <button
-                    onClick={() => setPage(page + 1)}
-                    disabled={page === totalPages - 1}
-                >
-                    Siguiente
-                </button>
-            </div>
+            <nav aria-label="Page navigation example">
+                <ul className="pagination">
+                    <button onClick={() => setPage(page - 1)} disabled={page === 0}>Anterior</button>
+                    <span> Página {page + 1} de {totalPages} </span>
+                    <button onClick={() => setPage(page + 1)} disabled={page === totalPages - 1}>Siguiente</button>
+                </ul>
+            </nav>
 
         </div>
     );
