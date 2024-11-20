@@ -1,24 +1,16 @@
 import React from 'react';
-import BusList from './components/BusList';
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import BusDetail from "./components/BusDetail";
+import BusLista from './components/BusLista';
+import {Routes, Route} from "react-router-dom";
+import BusDetalle from "./components/BusDetalle";
 
 const App: React.FC = () => {
     return (
+        <Routes>
+            <Route path="/" element={<BusLista/>}/>
 
-
-            <Routes>
-
-
-                    <Route path="/" element={<BusList/>}/>
-
-                    <Route path="/bus/:id" element={<BusDetail/>}/>
-
-            </Routes>
-
+            <Route path="/bus/:id" element={<BusDetalle/>}/>
+        </Routes>
     );
 };
 
 export default App;
-/*<h1>Bus Listing App</h1>
-        <BusList />*/

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom'; // Importamos useNavigate
 
-import { Bus, PaginatedResponse } from '../types/Bus';
+import {Bus, PaginatedResponse} from '../types/Bus';
 
-const BusList: React.FC = () => {
+const BusLista: React.FC = () => {
     const [buses, setBuses] = useState<Bus[]>([]);
     const [page, setPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [currentPage, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate(); // Usamos el hook useNavigate
@@ -38,12 +38,12 @@ const BusList: React.FC = () => {
         fetchBuses(page);
     }, [page]);
     // Función para redirigir al detalle del bus
-    const handleViewDetails = (id: number) => {
+    const verDetalle = (id: number) => {
         navigate(`/bus/${id}`);  // Redirige a la página de detalle del bus con el ID
     };
 
     return (
-        <div>
+        <div className="mt-5 rounded shadow">
             <h1>Listado de Buses</h1>
             <table className="table table-border table-striped">
                 <thead>
@@ -53,8 +53,8 @@ const BusList: React.FC = () => {
                     <th>Placa</th>
                     <th>Fecha de Creación</th>
                     <th>Caracteristica</th>
-                    <th>Marca</th>
                     <th>Estado</th>
+                    <th>Marca</th>
                     <th>VER</th>
                 </tr>
                 </thead>
@@ -66,11 +66,11 @@ const BusList: React.FC = () => {
                         <td>{bus.placa}</td>
                         <td>{bus.fechaCreacion}</td>
                         <td>{bus.caracteristicas}</td>
-                        <td>{bus.marca}</td>
                         <td>{bus.estado}</td>
+                        <td>{bus.marca.marca}</td>
                         <td>
                             <button className="btn btn-primary"
-                                    onClick={() => handleViewDetails(bus.id)}
+                                    onClick={() => verDetalle(bus.id)}
                             >VER
                             </button>
                         </td>
@@ -78,16 +78,37 @@ const BusList: React.FC = () => {
                 ))}
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
-                <ul className="pagination">
-                    <button onClick={() => setPage(page - 1)} disabled={page === 0}>Anterior</button>
-                    <span> Página {page + 1} de {totalPages} </span>
-                    <button onClick={() => setPage(page + 1)} disabled={page === totalPages - 1}>Siguiente</button>
+            <div className="pb-1" aria-label="Page navigation">
+                <ul className="pagination justify-content-center">
+                    <li className={`page-item ${page === 0 ? 'disabled' : ''}`}>
+                        <button
+                            className="page-link"
+                            onClick={() => setPage(page - 1)}
+                            disabled={page === 0}
+                        >
+                            Anterior
+                        </button>
+                    </li>
+                    <li className="page-item disabled">
+      <span className="page-link">
+        Página {page + 1} de {totalPages}
+      </span>
+                    </li>
+                    <li className={`page-item ${page === totalPages - 1 ? 'disabled' : ''}`}>
+                        <button
+                            className="page-link"
+                            onClick={() => setPage(page + 1)}
+                            disabled={page === totalPages - 1}
+                        >
+                            Siguiente
+                        </button>
+                    </li>
                 </ul>
-            </nav>
+            </div>
+
 
         </div>
     );
 };
 
-export default BusList;
+export default BusLista;
