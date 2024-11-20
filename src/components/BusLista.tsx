@@ -66,8 +66,8 @@ const BusLista: React.FC = () => {
                     <th>Placa</th>
                     <th>Fecha de Creación</th>
                     <th>Caracteristica</th>
-                    <th>Estado</th>
                     <th>Marca</th>
+                    <th>Estado</th>
                     <th>VER</th>
                 </tr>
                 </thead>
@@ -76,11 +76,11 @@ const BusLista: React.FC = () => {
                     <tr className="td" key={bus.id}>
                         <td>{bus.id}</td>
                         <td>{bus.numeroBus}</td>
+                        <td>{bus.placa}</td>
                         <td>{bus.fechaCreacion}</td>
                         <td>{bus.caracteristicas}</td>
-                        <td>{bus.placa}</td>
-                        <td>{bus.estado}</td>
                         <td>{bus.marca.marca}</td>
+                        <td>{bus.estado}</td>
                         <td>
                             <button className="btn btn-primary" onClick={() => verDetalle(bus.id)}>
                                 VER
