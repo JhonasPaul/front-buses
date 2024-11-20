@@ -1,0 +1,13 @@
+.tr{
+    flex-direction: column;
+    text-align: center;
+}
+.td{
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.text-center{
+    font-size: 20px;
+}

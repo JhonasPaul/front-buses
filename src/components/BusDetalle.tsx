@@ -1,17 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {Bus} from '../types/Bus';
-import {useNavigate} from 'react-router-dom'; // Importamos useNavigate
-
+import {useNavigate} from 'react-router-dom';
 
 const BusDetalle: React.FC = () => {
-    const {id} = useParams(); // Obtenemos el id de la URL
+    const {id} = useParams(); //obtenemos el id de la URL
     const [bus, setBus] = useState<Bus | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const navigate = useNavigate(); // Usamos el hook useNavigate
+    const navigate = useNavigate(); //usamos el hook useNavigate
 
+    const username = 'user';
+    const password = 'password';
+    const authHeader = 'Basic ' + btoa(username + ':' + password);  //codificación Base64 para autenticación básica
 
     useEffect(() => {
         const fetchBusDetail = async () => {
@@ -19,9 +21,14 @@ const BusDetalle: React.FC = () => {
             setError(null);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/bus/${id}`);
+                const response = await fetch(`http://localhost:8080/api/bus/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': authHeader,  // Agregamos el encabezado de autenticación
+                    },
+                });
                 if (!response.ok) {
-                    throw new Error('Failed to fetch bus details');
+                    throw new Error('Error en el detalle del bus');
                 }
 
                 const data = await response.json();
@@ -33,16 +40,18 @@ const BusDetalle: React.FC = () => {
             }
         };
 
+        if (id) {
+            fetchBusDetail();
+        }
+    }, [id]);  // reactiva cada vez que cambia el id
 
-        fetchBusDetail();
-    }, [id]);  // Reactiva cada vez que cambia el id
-
-    if (loading) return <div>Cargando...</div>;
-    if (error) return <div>{error}</div>;
+    if (loading) return <div className={"text-center"}>Cargando...</div>;
+    if (error) return <div className={"text-center"}> {error}</div>;
 
     const verLista = () => {
         navigate(`/`);
     };
+
     return (
         <div className="d-flex justify-content-center mt-5">
             <div className="row">
@@ -58,20 +67,17 @@ const BusDetalle: React.FC = () => {
                             <p><strong>Estado:</strong> {bus.estado}</p>
                             <p><strong>Característica:</strong> {bus.caracteristicas}</p>
                             <p><strong>Marca:</strong> {bus.marca.marca}</p>
-                            <td>
+                            <div>
                                 <button className="btn btn-primary"
                                         onClick={() => verLista()}
                                 > Volver
                                 </button>
-                            </td>
+                            </div>
                         </div>
-
                     )}
                 </div>
             </div>
         </div>
-
-
     );
 };
 
